@@ -4,7 +4,9 @@
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from config import *
 
 
@@ -83,6 +85,7 @@ class TripleParamControl(tk.Frame):
             freq_frame,
             text="+100",
             command=lambda: self.increment_value(self.fs, 100),
+            bootstyle="info-outline",
             width=10
         ).pack(pady=3)
         
@@ -90,6 +93,7 @@ class TripleParamControl(tk.Frame):
             freq_frame,
             text="应用",
             command=self.apply_freq,
+            bootstyle="success",
             width=10
         ).pack(pady=3)
         
@@ -128,6 +132,7 @@ class TripleParamControl(tk.Frame):
             amp_frame,
             text="+0.5",
             command=lambda: self.increment_value(self.vs, 0.5),
+            bootstyle="info-outline",
             width=10
         ).pack(pady=3)
         
@@ -135,6 +140,7 @@ class TripleParamControl(tk.Frame):
             amp_frame,
             text="应用",
             command=self.apply_amp,
+            bootstyle="success",
             width=10
         ).pack(pady=3)
         
@@ -173,6 +179,7 @@ class TripleParamControl(tk.Frame):
             peak_frame,
             text="+0.5",
             command=lambda: self.increment_value(self.vps, 0.5),
+            bootstyle="info-outline",
             width=10
         ).pack(pady=3)
         
@@ -180,6 +187,7 @@ class TripleParamControl(tk.Frame):
             peak_frame,
             text="应用",
             command=self.apply_peak,
+            bootstyle="success",
             width=10
         ).pack(pady=3)
         
@@ -195,6 +203,7 @@ class TripleParamControl(tk.Frame):
             bottom_frame,
             text="停止",
             command=self.toggle_state,
+            bootstyle="danger",
             width=15
         )
         self.start_stop_btn.pack(side=tk.LEFT, padx=10)
@@ -203,14 +212,14 @@ class TripleParamControl(tk.Frame):
             bottom_frame,
             text="Clear Buff",
             command=self.clear_buff,
+            bootstyle="warning",
             width=15
         ).pack(side=tk.LEFT, padx=10)
         
-        self.receive_status = tk.Label(
+        self.receive_status = ttk.Label(
             bottom_frame,
             text="清空缓冲待机中...",
-            font=FONT_STATUS,
-            bg=COLOR_BG
+            font=FONT_STATUS
         )
         self.receive_status.pack(side=tk.LEFT, padx=20)
         
@@ -218,6 +227,7 @@ class TripleParamControl(tk.Frame):
             bottom_frame,
             text="返回",
             command=lambda: self.navigate(0),
+            bootstyle="secondary",
             width=15
         ).pack(side=tk.RIGHT, padx=10)
     
@@ -279,12 +289,12 @@ class TripleParamControl(tk.Frame):
         """切换启动/停止状态"""
         if self.state1.get() == 1:
             self.state1.set(0)
-            self.start_stop_btn.config(text="启动")
+            self.start_stop_btn.config(text="启动", bootstyle="success")
             self.status_label.config(text="串口通讯：待机中.. (三参数模式)")
             if self.serial and self.serial.is_connected:
                 self.serial.send_clear_buff()
         else:
             self.state1.set(1)
-            self.start_stop_btn.config(text="停止")
+            self.start_stop_btn.config(text="停止", bootstyle="danger")
             self.status_label.config(text="串口通讯：运行中.. (三参数模式)")
 

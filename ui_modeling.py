@@ -4,7 +4,9 @@
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from config import *
 
 
@@ -59,9 +61,10 @@ class SystemModeling(tk.Frame):
             section1_frame,
             text="一键学习（启动建模）",
             command=self.toggle_modeling,
+            bootstyle="success-outline",
             width=40
         )
-        self.b9_modeling_btn.pack(pady=10, ipady=10)
+        self.b9_modeling_btn.pack(pady=10, ipady=12)
         
         # 建模结果显示区
         self.result_frame = tk.Frame(
@@ -111,9 +114,10 @@ class SystemModeling(tk.Frame):
             section2_frame,
             text="启动探究装置",
             command=self.toggle_start,
+            bootstyle="info-outline",
             width=40
         )
-        self.b0_start_btn.pack(pady=10, ipady=10)
+        self.b0_start_btn.pack(pady=10, ipady=12)
         
         # 底部返回按钮
         bottom_frame = tk.Frame(self, bg=COLOR_BG)
@@ -123,6 +127,7 @@ class SystemModeling(tk.Frame):
             bottom_frame,
             text="返回主菜单",
             command=self.on_return,
+            bootstyle="secondary",
             width=20
         ).pack(side=tk.RIGHT)
     
@@ -143,7 +148,7 @@ class SystemModeling(tk.Frame):
         if not self.b9_active:
             # 启动建模
             self.b9_active = True
-            self.b9_modeling_btn.config(text="停止建模")
+            self.b9_modeling_btn.config(text="停止建模", bootstyle="danger")
             self.title_label.config(text="未知电路模型建模：运行中..")
             self.result_frame.pack(fill=tk.X, pady=10)  # 显示结果区
             self.result_label.config(text="系统建模中... 请等待...", fg='#FFFF00')
@@ -156,7 +161,7 @@ class SystemModeling(tk.Frame):
         else:
             # 停止建模
             self.b9_active = False
-            self.b9_modeling_btn.config(text="一键学习（启动建模）")
+            self.b9_modeling_btn.config(text="一键学习（启动建模）", bootstyle="success-outline")
             self.title_label.config(text="未知电路模型建模：待机中..")
             self.result_frame.pack_forget()  # 隐藏结果区
             
@@ -169,7 +174,7 @@ class SystemModeling(tk.Frame):
         if not self.b0_active:
             # 启动装置
             self.b0_active = True
-            self.b0_start_btn.config(text="停止探究装置")
+            self.b0_start_btn.config(text="停止探究装置", bootstyle="danger")
             self.start_status_label.config(
                 text="启动状态：已启动",
                 fg=COLOR_SUCCESS
@@ -187,7 +192,7 @@ class SystemModeling(tk.Frame):
         else:
             # 停止装置
             self.b0_active = False
-            self.b0_start_btn.config(text="启动探究装置")
+            self.b0_start_btn.config(text="启动探究装置", bootstyle="info-outline")
             self.start_status_label.config(
                 text="启动状态：未启动",
                 fg='#757575'

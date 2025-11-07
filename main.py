@@ -5,7 +5,9 @@ SA 串口上位机主程序
 """
 
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 import sys
 
 from config import *
@@ -24,10 +26,6 @@ class HMIApplication:
         self.root.title(WINDOW_TITLE)
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
         self.root.resizable(False, False)  # 固定窗口大小
-        
-        # 应用ttk主题
-        style = ttk.Style()
-        style.theme_use('clam')  # 使用clam主题（现代化）
         
         # 串口通信对象
         self.serial_comm: SerialComm = None
@@ -286,7 +284,11 @@ f0.txt="1000 Hz"\\xff\\xff\\xff
 
 def main():
     """主函数"""
-    root = tk.Tk()
+    # 使用 ttkbootstrap 创建主题化窗口
+    root = ttk.Window(
+        themename="flatly",  # 使用 flatly 主题（现代、简洁）
+        # 其他可选主题: cosmo, litera, minty, pulse, sandstone, yeti, darkly, superhero
+    )
     app = HMIApplication(root)
     
     # 绑定关闭事件

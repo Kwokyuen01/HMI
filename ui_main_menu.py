@@ -4,7 +4,9 @@
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 from config import *
 
 
@@ -19,65 +21,58 @@ class MainMenu(tk.Frame):
     def setup_ui(self):
         """初始化UI"""
         # 顶部间距
-        tk.Frame(self, bg=COLOR_BG, height=40).pack()
+        tk.Frame(self, bg=COLOR_BG, height=60).pack()
         
-        # 按钮容器
+        # 按钮容器（垂直布局）
         button_frame = tk.Frame(self, bg=COLOR_BG)
-        button_frame.pack(pady=30)
+        button_frame.pack(expand=True, fill=tk.BOTH, padx=80, pady=20)
         
-        # 创建菜单按钮（2行3列布局）
+        # 创建菜单按钮（垂直排列）
         buttons = [
-            ("基础任务(2) - 双参数", lambda: self.navigate(7)),
-            ("基础任务(3、4) - 三参数", lambda: self.navigate(8)),
+            ("基础任务(2) - 双参数控制", lambda: self.navigate(7)),
+            ("基础任务(3、4) - 三参数控制", lambda: self.navigate(8)),
             ("发挥部分 - 系统建模", lambda: self.navigate(9)),
             ("串口调试", lambda: self.navigate(7)),
             ("RESET", self.on_reset),
             ("退出程序", self.on_exit),
         ]
         
-        for i, (text, command) in enumerate(buttons):
-            row = i // 3
-            col = i % 3
-            # 设置不同按钮的背景色
-            if text in ["RESET"]:
-                bg_color = '#FF9800'  # 橙色
-            elif text in ["退出程序"]:
-                bg_color = '#F44336'  # 红色
-            else:
-                bg_color = '#2196F3'  # 蓝色
-            
+        # 为不同按钮设置不同的 bootstyle
+        bootstyles = {
+            "基础任务(2) - 双参数控制": "primary",
+            "基础任务(3、4) - 三参数控制": "info",
+            "发挥部分 - 系统建模": "success",
+            "串口调试": "secondary",
+            "RESET": "warning",
+            "退出程序": "danger"
+        }
+        
+        for text, command in buttons:
             btn = ttk.Button(
                 button_frame,
                 text=text,
                 command=command,
-                width=25
+                bootstyle=bootstyles.get(text, "primary"),
+                width=50
             )
-            btn.grid(row=row, column=col, padx=20, pady=20, sticky='nsew')
-        
-        # 配置按钮大小一致
-        for i in range(3):
-            button_frame.grid_columnconfigure(i, weight=1, minsize=200)
+            btn.pack(fill=tk.X, pady=8, ipady=12)
         
         # 底部状态栏
         status_frame = tk.Frame(self, bg='#E0E0E0')
         status_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
         
-        self.status_label = tk.Label(
-            status_frame,
-            text="欢迎使用 SA 串口上位机",
-            font=FONT_STATUS,
-            bg='#E0E0E0',
-            fg=COLOR_TEXT
-        )
-        self.status_label.pack(pady=5)
+        # self.status_label = tk.Label(
+        #     status_frame,
+        #     text="欢迎使用 SA 串口上位机",
+        #     font=FONT_STATUS,
+        #     bg='#E0E0E0',
+        #     fg=COLOR_TEXT
+        # )
+        # self.status_label.pack(pady=5)
     
     def on_reset(self):
         """重置按钮"""
-        self.status_label.config(text="系统重置中...", fg=COLOR_WARNING)
-        # 这里可以发送clear buff命令
-        self.after(1000, lambda: self.status_label.config(
-            text="系统已重置", fg=COLOR_SUCCESS
-        ))
+        messagebox.showinfo("系统重置", "系统已重置")
     
     def on_exit(self):
         """退出程序"""
