@@ -73,9 +73,6 @@ ehthumbs.db
 Desktop.ini
 
 # 项目特定
-Apply.HMI
-Protocol_Analysis_Report.md
-Apply_HMI_Design_Documentation.md
 *.bak
 *.tmp
 

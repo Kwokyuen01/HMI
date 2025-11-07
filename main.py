@@ -23,7 +23,11 @@ class HMIApplication:
         self.root = root
         self.root.title(WINDOW_TITLE)
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
-        self.root.resizable(True, True)
+        self.root.resizable(False, False)  # 固定窗口大小
+        
+        # 应用ttk主题
+        style = ttk.Style()
+        style.theme_use('clam')  # 使用clam主题（现代化）
         
         # 串口通信对象
         self.serial_comm: SerialComm = None
@@ -76,14 +80,15 @@ class HMIApplication:
         """显示串口连接对话框"""
         dialog = tk.Toplevel(self.root)
         dialog.title("串口连接设置")
-        dialog.geometry("400x250")
+        dialog.geometry("450x280")
         dialog.transient(self.root)
         dialog.grab_set()
+        dialog.resizable(False, False)
         
         # 居中显示
         dialog.update_idletasks()
-        x = (dialog.winfo_screenwidth() // 2) - (400 // 2)
-        y = (dialog.winfo_screenheight() // 2) - (250 // 2)
+        x = (dialog.winfo_screenwidth() // 2) - (450 // 2)
+        y = (dialog.winfo_screenheight() // 2) - (280 // 2)
         dialog.geometry(f"+{x}+{y}")
         
         frame = tk.Frame(dialog, padx=20, pady=20)
@@ -101,10 +106,35 @@ class HMIApplication:
         settings_frame = tk.Frame(frame)
         settings_frame.pack(pady=10)
         
+        # 自动检测可用串口
+        import serial.tools.list_ports
+        available_ports = [port.device for port in serial.tools.list_ports.comports()]
+        
         tk.Label(settings_frame, text="串口号:", font=FONT_LABEL).grid(row=0, column=0, sticky='e', padx=5, pady=5)
-        port_var = tk.StringVar(value=SERIAL_PORT)
-        port_entry = tk.Entry(settings_frame, textvariable=port_var, font=FONT_LABEL, width=15)
-        port_entry.grid(row=0, column=1, padx=5, pady=5)
+        port_var = tk.StringVar(value=available_ports[0] if available_ports else SERIAL_PORT)
+        port_combo = ttk.Combobox(
+            settings_frame,
+            textvariable=port_var,
+            values=available_ports if available_ports else [SERIAL_PORT],
+            font=FONT_LABEL,
+            width=20,
+            state='readonly' if available_ports else 'normal'
+        )
+        port_combo.grid(row=0, column=1, padx=5, pady=5)
+        
+        # 刷新按钮
+        def refresh_ports():
+            ports = [port.device for port in serial.tools.list_ports.comports()]
+            port_combo['values'] = ports if ports else [SERIAL_PORT]
+            if ports:
+                port_var.set(ports[0])
+        
+        ttk.Button(
+            settings_frame,
+            text="刷新",
+            command=refresh_ports,
+            width=8
+        ).grid(row=0, column=2, padx=5, pady=5)
         
         tk.Label(settings_frame, text="波特率:", font=FONT_LABEL).grid(row=1, column=0, sticky='e', padx=5, pady=5)
         baud_var = tk.IntVar(value=SERIAL_BAUDRATE)
@@ -113,17 +143,18 @@ class HMIApplication:
             textvariable=baud_var,
             values=[9600, 19200, 38400, 57600, 115200, 230400],
             font=FONT_LABEL,
-            width=13,
+            width=20,
             state='readonly'
         )
         baud_combo.grid(row=1, column=1, padx=5, pady=5)
         
         # 提示信息
+        tip_text = f"检测到 {len(available_ports)} 个串口" if available_ports else "未检测到串口，请检查设备连接"
         tip_label = tk.Label(
             frame,
-            text="提示：Linux/Mac使用 /dev/ttyUSB0\nWindows使用 COM3",
+            text=tip_text,
             font=FONT_STATUS,
-            fg='#757575',
+            fg='#4CAF50' if available_ports else '#F44336',
             justify=tk.LEFT
         )
         tip_label.pack(pady=5)
@@ -158,24 +189,18 @@ class HMIApplication:
                 self.create_pages()
                 self.navigate(0)
         
-        tk.Button(
+        ttk.Button(
             btn_frame,
             text="连接",
-            font=FONT_BUTTON,
-            width=10,
-            bg=COLOR_SUCCESS,
-            fg='white',
-            command=on_connect
+            command=on_connect,
+            width=12
         ).pack(side=tk.LEFT, padx=10)
         
-        tk.Button(
+        ttk.Button(
             btn_frame,
             text="跳过（离线）",
-            font=FONT_BUTTON,
-            width=12,
-            bg='#9E9E9E',
-            fg='white',
-            command=on_skip
+            command=on_skip,
+            width=12
         ).pack(side=tk.LEFT, padx=10)
         
     def create_pages(self):

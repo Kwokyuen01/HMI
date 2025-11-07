@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Page 0 - 主菜单界面
+主菜单界面
 """
 
 import tkinter as tk
@@ -14,32 +14,12 @@ class MainMenu(tk.Frame):
     def __init__(self, parent, navigate_callback):
         super().__init__(parent, bg=COLOR_BG)
         self.navigate = navigate_callback
-        self.rotation_angle = 0
         self.setup_ui()
-        # 启动旋转动画
-        self.start_rotation_animation()
     
     def setup_ui(self):
         """初始化UI"""
-        # 标题
-        title = tk.Label(
-            self, 
-            text="SA 系统控制平台",
-            font=('Arial', 24, 'bold'),
-            bg=COLOR_BG,
-            fg='#2196F3'
-        )
-        title.pack(pady=40)
-        
-        # 旋转动画标签（模拟原HMI的z0旋转）
-        self.rotation_label = tk.Label(
-            self,
-            text="⚙",
-            font=('Arial', 48),
-            bg=COLOR_BG,
-            fg='#9E9E9E'
-        )
-        self.rotation_label.pack(pady=20)
+        # 顶部间距
+        tk.Frame(self, bg=COLOR_BG, height=40).pack()
         
         # 按钮容器
         button_frame = tk.Frame(self, bg=COLOR_BG)
@@ -66,22 +46,17 @@ class MainMenu(tk.Frame):
             else:
                 bg_color = '#2196F3'  # 蓝色
             
-            btn = tk.Button(
+            btn = ttk.Button(
                 button_frame,
                 text=text,
-                font=('Arial', 11, 'bold'),
-                width=18,
-                height=3,
-                bg=bg_color,
-                fg='white',
-                activebackground=bg_color,
-                activeforeground='white',
                 command=command,
-                relief=tk.RAISED,
-                bd=3,
-                cursor='hand2'
+                width=25
             )
-            btn.grid(row=row, column=col, padx=15, pady=15)
+            btn.grid(row=row, column=col, padx=20, pady=20, sticky='nsew')
+        
+        # 配置按钮大小一致
+        for i in range(3):
+            button_frame.grid_columnconfigure(i, weight=1, minsize=200)
         
         # 底部状态栏
         status_frame = tk.Frame(self, bg='#E0E0E0')
@@ -95,22 +70,6 @@ class MainMenu(tk.Frame):
             fg=COLOR_TEXT
         )
         self.status_label.pack(pady=5)
-    
-    def start_rotation_animation(self):
-        """启动旋转动画（模拟原HMI的z0.val自增）"""
-        self.rotation_angle += 5
-        if self.rotation_angle >= 360:
-            self.rotation_angle = 0
-        elif self.rotation_angle == 215:
-            self.rotation_angle = 330  # 原HMI逻辑
-        
-        # 更新旋转效果（通过改变字符模拟）
-        symbols = ['⚙', '◎', '◉', '●', '◉', '◎']
-        symbol_idx = (self.rotation_angle // 60) % len(symbols)
-        self.rotation_label.config(text=symbols[symbol_idx])
-        
-        # 每100ms更新一次
-        self.after(100, self.start_rotation_animation)
     
     def on_reset(self):
         """重置按钮"""

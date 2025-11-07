@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Page 7 - 串口通讯控制页（双参数：频率+幅值）
+双参数控制页面（频率+幅值）
 """
 
 import tkinter as tk
@@ -85,30 +85,18 @@ class DualParamControl(tk.Frame):
         freq_btn_frame = tk.Frame(freq_frame, bg=COLOR_BG)
         freq_btn_frame.pack(pady=10)
         
-        tk.Button(
+        ttk.Button(
             freq_btn_frame,
             text="+100",
-            font=('Arial', 10, 'bold'),
-            width=8,
-            bg='#2196F3',
-            fg='white',
-            activebackground='#1976D2',
-            activeforeground='white',
-            cursor='hand2',
-            command=lambda: self.increment_value(self.fs, 100)
+            command=lambda: self.increment_value(self.fs, 100),
+            width=10
         ).pack(side=tk.LEFT, padx=5)
         
-        tk.Button(
+        ttk.Button(
             freq_btn_frame,
             text="应用",
-            font=('Arial', 10, 'bold'),
-            width=8,
-            bg='#4CAF50',
-            fg='white',
-            activebackground='#388E3C',
-            activeforeground='white',
-            cursor='hand2',
-            command=self.apply_freq
+            command=self.apply_freq,
+            width=10
         ).pack(side=tk.LEFT, padx=5)
         
         # === 幅值控制 ===
@@ -150,30 +138,18 @@ class DualParamControl(tk.Frame):
         amp_btn_frame = tk.Frame(amp_frame, bg=COLOR_BG)
         amp_btn_frame.pack(pady=10)
         
-        tk.Button(
+        ttk.Button(
             amp_btn_frame,
             text="+0.5",
-            font=('Arial', 10, 'bold'),
-            width=8,
-            bg='#2196F3',
-            fg='white',
-            activebackground='#1976D2',
-            activeforeground='white',
-            cursor='hand2',
-            command=lambda: self.increment_value(self.vs, 0.5)
+            command=lambda: self.increment_value(self.vs, 0.5),
+            width=10
         ).pack(side=tk.LEFT, padx=5)
         
-        tk.Button(
+        ttk.Button(
             amp_btn_frame,
             text="应用",
-            font=('Arial', 10, 'bold'),
-            width=8,
-            bg='#4CAF50',
-            fg='white',
-            activebackground='#388E3C',
-            activeforeground='white',
-            cursor='hand2',
-            command=self.apply_amp
+            command=self.apply_amp,
+            width=10
         ).pack(side=tk.LEFT, padx=5)
         
         # 配置grid权重
@@ -184,47 +160,26 @@ class DualParamControl(tk.Frame):
         bottom_frame = tk.Frame(self, bg=COLOR_BG)
         bottom_frame.pack(fill=tk.X, padx=20, pady=10)
         
-        self.start_stop_btn = tk.Button(
+        self.start_stop_btn = ttk.Button(
             bottom_frame,
             text="停止",
-            font=('Arial', 11, 'bold'),
-            width=12,
-            height=2,
-            bg='#F44336',
-            fg='white',
-            activebackground='#D32F2F',
-            activeforeground='white',
-            cursor='hand2',
-            command=self.toggle_state
+            command=self.toggle_state,
+            width=15
         )
         self.start_stop_btn.pack(side=tk.LEFT, padx=10)
         
-        tk.Button(
+        ttk.Button(
             bottom_frame,
             text="Clear Buff",
-            font=('Arial', 11, 'bold'),
-            width=12,
-            height=2,
-            bg='#FF9800',
-            fg='white',
-            activebackground='#F57C00',
-            activeforeground='white',
-            cursor='hand2',
-            command=self.clear_buff
+            command=self.clear_buff,
+            width=15
         ).pack(side=tk.LEFT, padx=10)
         
-        tk.Button(
+        ttk.Button(
             bottom_frame,
             text="返回",
-            font=('Arial', 11, 'bold'),
-            width=12,
-            height=2,
-            bg='#757575',
-            fg='white',
-            activebackground='#616161',
-            activeforeground='white',
-            cursor='hand2',
-            command=lambda: self.navigate(0)
+            command=lambda: self.navigate(0),
+            width=15
         ).pack(side=tk.RIGHT, padx=10)
     
     def setup_serial_callback(self):
@@ -280,7 +235,7 @@ class DualParamControl(tk.Frame):
         if self.state1.get() == 1:
             # 当前运行 -> 停止
             self.state1.set(0)
-            self.start_stop_btn.config(text="启动", bg='#4CAF50', activebackground='#388E3C')
+            self.start_stop_btn.config(text="启动")
             self.status_label.config(text="串口通讯：待机中..")
             # 发送clear buff
             if self.serial and self.serial.is_connected:
@@ -288,6 +243,6 @@ class DualParamControl(tk.Frame):
         else:
             # 当前停止 -> 运行
             self.state1.set(1)
-            self.start_stop_btn.config(text="停止", bg='#F44336', activebackground='#D32F2F')
+            self.start_stop_btn.config(text="停止")
             self.status_label.config(text="串口通讯：运行中..")
 

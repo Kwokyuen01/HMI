@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Page 9 - 系统建模控制页
+系统建模控制页面
 """
 
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 from config import *
 
 
@@ -55,22 +55,13 @@ class SystemModeling(tk.Frame):
             fg='#3F51B5'
         ).pack(pady=10)
         
-        self.b9_modeling_btn = tk.Button(
+        self.b9_modeling_btn = ttk.Button(
             section1_frame,
             text="一键学习（启动建模）",
-            font=('Arial', 14, 'bold'),
-            width=30,
-            height=3,
-            bg='#C0C0C0',
-            fg='#000000',
-            activebackground='#B0B0B0',
-            activeforeground='#000000',
-            cursor='hand2',
             command=self.toggle_modeling,
-            relief=tk.RAISED,
-            bd=4
+            width=40
         )
-        self.b9_modeling_btn.pack(pady=10)
+        self.b9_modeling_btn.pack(pady=10, ipady=10)
         
         # 建模结果显示区
         self.result_frame = tk.Frame(
@@ -116,39 +107,23 @@ class SystemModeling(tk.Frame):
         )
         self.start_status_label.pack(pady=5)
         
-        self.b0_start_btn = tk.Button(
+        self.b0_start_btn = ttk.Button(
             section2_frame,
             text="启动探究装置",
-            font=('Arial', 14, 'bold'),
-            width=30,
-            height=3,
-            bg='#C0C0C0',
-            fg='#000000',
-            activebackground='#B0B0B0',
-            activeforeground='#000000',
-            cursor='hand2',
             command=self.toggle_start,
-            relief=tk.RAISED,
-            bd=4
+            width=40
         )
-        self.b0_start_btn.pack(pady=10)
+        self.b0_start_btn.pack(pady=10, ipady=10)
         
         # 底部返回按钮
         bottom_frame = tk.Frame(self, bg=COLOR_BG)
         bottom_frame.pack(fill=tk.X, padx=40, pady=20)
         
-        tk.Button(
+        ttk.Button(
             bottom_frame,
             text="返回主菜单",
-            font=('Arial', 11, 'bold'),
-            width=15,
-            height=2,
-            bg='#757575',
-            fg='white',
-            activebackground='#616161',
-            activeforeground='white',
-            cursor='hand2',
-            command=self.on_return
+            command=self.on_return,
+            width=20
         ).pack(side=tk.RIGHT)
     
     def setup_serial_callback(self):
@@ -168,13 +143,7 @@ class SystemModeling(tk.Frame):
         if not self.b9_active:
             # 启动建模
             self.b9_active = True
-            self.b9_modeling_btn.config(
-                text="停止建模",
-                bg='#FF9800',
-                fg='white',
-                activebackground='#F57C00',
-                activeforeground='white'
-            )
+            self.b9_modeling_btn.config(text="停止建模")
             self.title_label.config(text="未知电路模型建模：运行中..")
             self.result_frame.pack(fill=tk.X, pady=10)  # 显示结果区
             self.result_label.config(text="系统建模中... 请等待...", fg='#FFFF00')
@@ -187,13 +156,7 @@ class SystemModeling(tk.Frame):
         else:
             # 停止建模
             self.b9_active = False
-            self.b9_modeling_btn.config(
-                text="一键学习（启动建模）",
-                bg='#C0C0C0',
-                fg='#000000',
-                activebackground='#B0B0B0',
-                activeforeground='#000000'
-            )
+            self.b9_modeling_btn.config(text="一键学习（启动建模）")
             self.title_label.config(text="未知电路模型建模：待机中..")
             self.result_frame.pack_forget()  # 隐藏结果区
             
@@ -206,13 +169,7 @@ class SystemModeling(tk.Frame):
         if not self.b0_active:
             # 启动装置
             self.b0_active = True
-            self.b0_start_btn.config(
-                text="停止探究装置",
-                bg='#FF9800',
-                fg='white',
-                activebackground='#F57C00',
-                activeforeground='white'
-            )
+            self.b0_start_btn.config(text="停止探究装置")
             self.start_status_label.config(
                 text="启动状态：已启动",
                 fg=COLOR_SUCCESS
@@ -230,13 +187,7 @@ class SystemModeling(tk.Frame):
         else:
             # 停止装置
             self.b0_active = False
-            self.b0_start_btn.config(
-                text="启动探究装置",
-                bg='#C0C0C0',
-                fg='#000000',
-                activebackground='#B0B0B0',
-                activeforeground='#000000'
-            )
+            self.b0_start_btn.config(text="启动探究装置")
             self.start_status_label.config(
                 text="启动状态：未启动",
                 fg='#757575'
