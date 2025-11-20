@@ -165,7 +165,5 @@ result.txt="Filter Type : LPF"\xff\xff\xff
 - `Apply_HMI_Design_Documentation.md` - 完整设计文档
 - `SA.sdk/FFTCTR/src/ISR.c` - 下位机协议实现
 
-## License
 
-本项目基于SA项目开发
 
